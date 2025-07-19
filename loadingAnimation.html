@@ -11,48 +11,90 @@
   <meta charset="UTF-8">
   <title>Mukwaya Lwere’s Animation Simulator - Page Loading</title>
 </head>
+
+<!-- 
+  For Mukwaya Lwere's assignment, this file serves as an entertaining loading animation simulator. 
+  By cycling spinner characters, updating messages, playing a sound when it's "done," and having a restart button to play it again, it simulates a loading process.
+-->
+
 <body style="font-family: monospace; text-align: center; padding-top: 100px; background-color: #f4f4f4;">
 
-  <!-- This is where the loading icon or spinner will show -->
-  <div id="loadingDisplay" style="font-size: 2rem; margin-bottom: 20px;">
-    Still Working... Getting things ready...
+  <!-- This div holds the spinning animation character, kinda like a "fake progress bar" -->
+  <div id="loadingArea" style="font-size: 2rem; margin-bottom: 20px;">
+    Just a moment... we're getting things going!
   </div>
 
-  <!-- This shows the current loading status as text -->
-  <div id="loadingMessage">
-    Be Patient... please, loading...
+  <!-- Here’s where we’ll show updates about the loading process — human-readable style -->
+  <div id="statusMessage">
+    Hang tight, things are in motion...
   </div>
+
+  <!-- A sound that plays when everything’s finished 🎵 -->
+  <audio id="doneSound" src="https://www.soundjay.com/buttons/sounds/button-4.mp3" preload="auto"></audio>
+
+  <!-- A button the user can click to replay the animation once it's done -->
+  <button id="tryAgainButton" style="display:none; padding: 10px 20px; font-size: 1rem; margin-top: 20px;">
+    Try That Again
+  </button>
 
   <script>
-    // Function that handles the whole loading animation logic
-    function startLoadingForMukwayaLwere() {
-      const loader = document.getElementById("loadingDisplay");
-      const status = document.getElementById("loadingMessage");
+    // Main function that powers the loading simulation
+    function runCoolLoadingForMukwaya() {
+      // Grab all our key elements from the page
+      const spinnerDisplay = document.getElementById("loadingArea");
+      const textStatus = document.getElementById("statusMessage");
+      const celebrationSound = document.getElementById("doneSound");
+      const replayBtn = document.getElementById("tryAgainButton");
 
-      const animationSteps = ["|", "/", "-", "\\"]; // Spinning wheel frames
-      let index = 0;
-      let cycleCount = 0;
-      const maxCycles = 8;
+      // This is our "spinner" using text characters successively
+      const spinningFrames = ["|", "/", "-", "\\"];
+      let currentTurn = 0;
+      let fullSpins = 0;
+      const totalLoopsNeeded = 8; // roughly how long we want to spin (you could adjust this)
 
-      const interval = setInterval(() => {
-        loader.textContent = animationSteps[index % animationSteps.length];
-        index++;
-        if (index % animationSteps.length === 0) {
-          cycleCount++;
+      // Show the default opening message and wipe previous end state if replayed
+      spinnerDisplay.textContent = "Just a moment... we're getting things going!";
+      textStatus.textContent = "Hang tight, things are in motion...";
+      document.body.style.backgroundColor = "#f4f4f4";  // Back to neutral gray
+      replayBtn.style.display = "none"; // Hide "Try Again" during animation
+
+      // Start the animation loop
+      const spinnerInterval = setInterval(() => {
+        spinnerDisplay.textContent = spinningFrames[currentTurn % spinningFrames.length]; // rotate spinner symbols
+        currentTurn++;
+
+        // After each complete cycle, count up
+        if (currentTurn % spinningFrames.length === 0) {
+          fullSpins++;
         }
-        if (cycleCount >= maxCycles) {
-          clearInterval(interval);
-          loader.textContent = "🎉 Mukwaya Lwere all Tasks are Finished!";
-          status.textContent = "All process are done! Thank you for your patience and waiting. — Mukwaya Lwere";
-          document.body.style.backgroundColor = "#d0f0c0"; // soft green
+
+        // Once we’ve done enough loops, it’s time to stop and celebrate
+        if (fullSpins >= totalLoopsNeeded) {
+          clearInterval(spinnerInterval); // Stop the animation loop
+
+          // Update to the finished state
+          spinnerDisplay.textContent = "🎉 Mukwaya Lwere — all Tasks are Finished!";
+          textStatus.textContent = "Everything wrapped up nicely. Thanks for waiting!";
+          document.body.style.backgroundColor = "#d0f0c0"; // change color to success green
+
+          celebrationSound.play(); // Play the finish sound
+          replayBtn.style.display = "inline-block"; // Show button to run again
         }
-      }, 200); // smoother animation speed
+      }, 200); // Smooth timing — changes spinner every 200ms
     }
 
-    // Run the animation when the page loads
-    startLoadingForMukwayaLwere();
+    // When page loads, this sets up everything including the restart button
+    document.addEventListener("DOMContentLoaded", () => {
+      const replayBtn = document.getElementById("tryAgainButton");
 
-    // 💡 Extra idea: Trigger a restart button or add a fading sound cue once complete!
+      // If the user clicks "Try Again", re-run the whole animation
+      replayBtn.addEventListener("click", () => {
+        runCoolLoadingForMukwaya(); // Start over
+      });
+
+      // Kick things off automatically when the page opens!
+      runCoolLoadingForMukwaya();
+    });
   </script>
 
 </body>
