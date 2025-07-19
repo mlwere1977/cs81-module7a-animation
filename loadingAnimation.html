@@ -1,40 +1,68 @@
+// Name: Mukwaya Lwere
+// Class: CS 81 JavaScript
+// Module 7 Assignment 7A: Code Review
+// Date: 07/09/2025
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Loading Animation Simulator</title>
+  <title>Mukwaya Lwere’s Animation Simulator - Page Loading</title>
 </head>
 <body style="font-family: monospace; text-align: center; padding-top: 100px; background-color: #f4f4f4;">
 
-  <div id="loader" style="font-size: 2rem; margin-bottom: 20px;">Loading...</div>
-  <div id="status">Please wait</div>
+  <!-- This is where the loading icon or dots will show -->
+  <div id="loadingDisplay" style="font-size: 2rem; margin-bottom: 20px;">Still Working....Getting things ready...</div>
+
+  <!-- This shows the current loading status as text -->
+  <div id="loadingMessage">Be Patient...... please, loading...</div>
 
   <script>
-    function runLoadingAnimation() {
-      const loader = document.getElementById("loader");
-      const status = document.getElementById("status");
+    // Function that handles the whole loading animation logic
+    function startLoadingForMukwayaLwere() {
+      // Grab the HTML elements by their IDs so we can update their content later
+      const animationBox = document.getElementById("loadingDisplay");
+      const messageBox = document.getElementById("loadingMessage");
 
-      const frames = ["⏳", "⌛", ".", "..", "..."];
-      let index = 0;
-      let cycleCount = 0;
-      const maxCycles = 10;
+      // These are the animation steps that will run in a loop
+      const animationSteps = ["⏳", "⌛", ".", "..", "..."];
 
-      const interval = setInterval(() => {
-        loader.textContent = frames[index % frames.length];
-        index++;
-        if (index % frames.length === 0) {
-          cycleCount++;
+      let currentStep = 0;       // Keeps track of which animation frame we’re on
+      let fullLoopsDone = 0;     // Counts how many complete loops have run
+      const maxLoops = 8;        // We’ll stop after this many loops
+
+      // This function runs over and over again every half second (500ms)
+      const animationTimer = setInterval(() => {
+
+        // Show the current animation frame in the display box
+        animationBox.textContent = animationSteps[currentStep % animationSteps.length];
+
+        // Move to next step
+        currentStep++;
+
+        // Check if one full loop has completed
+        if (currentStep % animationSteps.length === 0) {
+          fullLoopsDone++;
         }
-        if (cycleCount >= maxCycles) {
-          clearInterval(interval);
-          loader.textContent = "✅";
-          status.textContent = "Done!";
+
+        // If we've finished all the desired loops, stop the animation
+        if (fullLoopsDone >= maxLoops) {
+          clearInterval(animationTimer); // This stops the interval from looping forever
+
+          // Update the screen with a finished icon and message
+          animationBox.textContent = "✅";
+          messageBox.textContent = "All process are done! Thank you for you patience and waiting. — Mukwaya Lwere";
+
+          // Just to make things feel fresh — change background color when done
+          document.body.style.backgroundColor = "#d0f0c0"; // soft green
         }
-      }, 500);
+      }, 500); // Runs every 500 milliseconds
     }
 
-    runLoadingAnimation();
+    // As soon as the page loads, run the animation
+    startLoadingForMukwayaLwere();
+
+    // 💡 Fun expansion idea: Add a little background tune or sound effect when it finishes 🎵
   </script>
 
 </body>
